@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Family Learning App</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Poppins for cheerful kids style -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            user-select: none;
+        }
+        /* Floating animation for clouds and sun */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes pulse-slow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 3s ease-in-out infinite;
+        }
+        /* Bounce effect for family member cards */
+        .family-card {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+        }
+        .family-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-sky-100 min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-white/80 backdrop-blur-md shadow-md py-3 px-6 sticky top-0 z-50 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <span class="text-3xl">🏡</span>
+            <h1 class="text-2xl font-extrabold text-amber-500 tracking-wide drop-shadow-sm">My Family Fun!</h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <button onclick="playBGM()" id="soundToggle" class="bg-pink-500 hover:bg-pink-600 text-white font-bold px-4 py-2 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-2 text-sm">
+                🎵 <span id="soundText">Sound On</span>
+            </button>
+            <button onclick="showQuizModal()" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold px-5 py-2 rounded-full shadow-lg transition transform hover:scale-105 flex items-center gap-2 text-sm">
+                🎮 Fun Quiz!
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area: Vector Illustration Background + Family Characters -->
+    <main class="flex-grow relative flex flex-col justify-end items-center pb-12">
+
+        <!-- Background Scene container -->
+        <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+            <!-- Sky Gradient Background -->
+            <div class="absolute inset-0 bg-gradient-to-b from-sky-300 via-sky-200 to-emerald-100"></div>
+
+            <!-- Sun -->
+            <div class="absolute top-8 right-12 w-28 h-28 bg-amber-300 rounded-full shadow-lg shadow-amber-300/50 animate-pulse-slow flex items-center justify-center">
+                <span class="text-5xl">☀️</span>
+            </div>
+
+            <!-- Rainbow -->
+            <div class="absolute top-12 left-1/2 -translate-x-1/2 w-[700px] h-[350px] opacity-85">
+                <svg viewBox="0 0 500 250" class="w-full h-full">
+                    <path d="M 50 220 A 200 200 0 0 1 450 220" fill="none" stroke="#ef4444" stroke-width="12" stroke-linecap="round"/>
+                    <path d="M 60 220 A 190 190 0 0 1 440 220" fill="none" stroke="#f97316" stroke-width="12" stroke-linecap="round"/>
+                    <path d="M 70 220 A 180 180 0 0 1 430 220" fill="none" stroke="#eab308" stroke-width="12" stroke-linecap="round"/>
+                    <path d="M 80 220 A 170 170 0 0 1 420 220" fill="none" stroke="#22c55e" stroke-width="12" stroke-linecap="round"/>
+                    <path d="M 90 220 A 160 160 0 0 1 410 220" fill="none" stroke="#3b82f6" stroke-width="12" stroke-linecap="round"/>
+                    <path d="M 100 220 A 150 150 0 0 1 400 220" fill="none" stroke="#a855f7" stroke-width="12" stroke-linecap="round"/>
+                </svg>
+            </div>
+
+            <!-- Clouds -->
+            <div class="absolute top-16 left-12 text-5xl animate-float opacity-90">☁️</div>
+            <div class="absolute top-24 right-1/3 text-6xl animate-float" style="animation-delay: 1.5s;">☁️</div>
+
+            <!-- Colorful House in Background -->
+            <div class="absolute bottom-32 left-1/2 -translate-x-1/2 w-full max-w-4xl flex justify-center items-end px-4 opacity-95">
+                <svg viewBox="0 0 800 400" class="w-full max-h-[360px] drop-shadow-md">
+                    <!-- Roof -->
+                    <polygon points="400,30 150,150 650,150" fill="#f43f5e" stroke="#1e293b" stroke-width="4"/>
+                    <polygon points="400,30 650,150 700,150 450,30" fill="#fb7185" opacity="0.3"/>
+                    <!-- House Body -->
+                    <rect x="200" y="150" width="400" height="220" fill="#fef08a" stroke="#1e293b" stroke-width="4" rx="8"/>
+                    <!-- Door -->
+                    <rect x="360" y="250" width="80" height="120" fill="#854d0e" stroke="#1e293b" stroke-width="4" rx="4"/>
+                    <circle cx="425" cy="310" r="5" fill="#facc15"/>
+                    <!-- Windows -->
+                    <rect x="240" y="180" width="80" height="80" fill="#bae6fd" stroke="#1e293b" stroke-width="4" rx="6"/>
+                    <line x1="280" y1="180" x2="280" y2="260" stroke="#1e293b" stroke-width="3"/>
+                    <line x1="240" y1="220" x2="320" y2="220" stroke="#1e293b" stroke-width="3"/>
+                    
+                    <rect x="480" y="180" width="80" height="80" fill="#bae6fd" stroke="#1e293b" stroke-width="4" rx="6"/>
+                    <line x1="520" y1="180" x2="520" y2="260" stroke="#1e293b" stroke-width="3"/>
+                    <line x1="480" y1="220" x2="560" y2="220" stroke="#1e293b" stroke-width="3"/>
+                    <!-- Chimney -->
+                    <rect x="530" y="70" width="45" height="60" fill="#fb923c" stroke="#1e293b" stroke-width="4"/>
+                </svg>
+            </div>
+
+            <!-- Green Lawn / Ground -->
+            <div class="absolute bottom-0 left-0 right-0 h-36 bg-gradient-to-t from-emerald-500 to-emerald-400 border-t-8 border-emerald-600 rounded-t-[50%] scale-x-125"></div>
+        </div>
+
+        <!-- Foreground Interactive Section: Title & Instructions -->
+        <div class="relative z-10 text-center mb-8 px-4 mt-6">
+            <span class="bg-white/90 text-purple-700 text-sm md:text-base font-bold px-5 py-2 rounded-full shadow-md uppercase tracking-wider border-2 border-purple-200">
+                ✨ Tap each family member to learn & hear! ✨
+            </span>
+        </div>
+
+        <!-- Family Members Cards Grid (Grandfather, Grandmother, Father, Mother, Brother, Sister) -->
+        <div class="relative z-10 w-full max-w-6xl mx-auto px-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+            
+            <!-- Grandfather -->
+            <div onclick="selectMember('Grandfather', '👴', 'Grandfather is wise, tells wonderful bedtime stories, and loves gardening!')" 
+                 class="family-card bg-white/95 backdrop-blur-sm border-4 border-amber-300 rounded-3xl p-4 flex flex-col items-center cursor-pointer shadow-xl text-center group">
+                <div class="w-20 h-20 md:w-24 md:h-24 bg-amber-100 rounded-full flex items-center justify-center text-5xl md:text-6xl mb-3 shadow-inner group-hover:scale-110 transition">
+                    👴
+                </div>
+                <h3 class="font-extrabold text-slate-800 text-lg md:text-xl">Grandfather</h3>
+                <span class="text-xs font-semibold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full mt-1">Kakek / Grandpa</span>
+            </div>
+
+            <!-- Grandmother -->
+            <div onclick="selectMember('Grandmother', '👵', 'Grandmother bakes the most delicious cookies and gives the warmest hugs!')" 
+                 class="family-card bg-white/95 backdrop-blur-sm border-4 border-pink-300 rounded-3xl p-4 flex flex-col items-center cursor-pointer shadow-xl text-center group">
+                <div class="w-20 h-20 md:w-24 md:h-24 bg-pink-100 rounded-full flex items-center justify-center text-5xl md:text-6xl mb-3 shadow-inner group-hover:scale-110 transition">
+                    👵
+                </div>
+                <h3 class="font-extrabold text-slate-800 text-lg md:text-xl">Grandmother</h3>
+                <span class="text-xs font-semibold text-pink-600 bg-pink-50 px-2.5 py-1 rounded-full mt-1">Nenek / Grandma</span>
+            </div>
+
+            <!-- Father -->
+            <div onclick="selectMember('Father', '👨', 'Father is strong and kind, helps with homework, and loves playing sports!')" 
+                 class="family-card bg-white/95 backdrop-blur-sm border-4 border-blue-300 rounded-3xl p-4 flex flex-col items-center cursor-pointer shadow-xl text-center group">
+                <div class="w-20 h-20 md:w-24 md:h-24 bg-blue-100 rounded-full flex items-center justify-center text-5xl md:text-6xl mb-3 shadow-inner group-hover:scale-110 transition">
+                    👨
+                </div>
+                <h3 class="font-extrabold text-slate-800 text-lg md:text-xl">Father</h3>
+                <span class="text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full mt-1">Ayah / Dad</span>
+            </div>
+
+            <!-- Mother -->
+            <div onclick="selectMember('Mother', '👩', 'Mother takes care of everyone with love, sings sweet songs, and cooks yummy meals!')" 
+                 class="family-card bg-white/95 backdrop-blur-sm border-4 border-purple-300 rounded-3xl p-4 flex flex-col items-center cursor-pointer shadow-xl text-center group">
+                <div class="w-20 h-20 md:w-24 md:h-24 bg-purple-100 rounded-full flex items-center justify-center text-5xl md:text-6xl mb-3 shadow-inner group-hover:scale-110 transition">
+                    👩
+                </div>
+                <h3 class="font-extrabold text-slate-800 text-lg md:text-xl">Mother</h3>
+                <span class="text-xs font-semibold text-purple-600 bg-purple-50 px-2.5 py-1 rounded-full mt-1">Ibu / Mom</span>
+            </div>
+
+            <!-- Brother -->
+            <div onclick="selectMember('Brother', '👦', 'Brother is energetic, loves building block towers, and sharing fun adventures!')" 
+                 class="family-card bg-white/95 backdrop-blur-sm border-4 border-teal-300 rounded-3xl p-4 flex flex-col items-center cursor-pointer shadow-xl text-center group">
+                <div class="w-20 h-20 md:w-24 md:h-24 bg-teal-100 rounded-full flex items-center justify-center text-5xl md:text-6xl mb-3 shadow-inner group-hover:scale-110 transition">
+                    👦
+                </div>
+                <h3 class="font-extrabold text-slate-800 text-lg md:text-xl">Brother</h3>
+                <span class="text-xs font-semibold text-teal-600 bg-teal-50 px-2.5 py-1 rounded-full mt-1">Kakak/Adik Laki</span>
+            </div>
+
+            <!-- Sister -->
+            <div onclick="selectMember('Sister', '👧', 'Sister loves drawing colorful pictures, playing with dolls, and dancing around!')" 
+                 class="family-card bg-white/95 backdrop-blur-sm border-4 border-rose-300 rounded-3xl p-4 flex flex-col items-center cursor-pointer shadow-xl text-center group">
+                <div class="w-20 h-20 md:w-24 md:h-24 bg-rose-100 rounded-full flex items-center justify-center text-5xl md:text-6xl mb-3 shadow-inner group-hover:scale-110 transition">
+                    👧
+                </div>
+                <h3 class="font-extrabold text-slate-800 text-lg md:text-xl">Sister</h3>
+                <span class="text-xs font-semibold text-rose-600 bg-rose-50 px-2.5 py-1 rounded-full mt-1">Kakak/Adik Peremp</span>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer Credit -->
+    <footer class="bg-white/70 py-3 text-center text-xs font-medium text-slate-600 relative z-20">
+        Made with ❤️ for Kids • Interactive Family Learning App
+    </footer>
+
+    <!-- Interactive Details Modal / Popup Box -->
+    <div id="detailModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border-4 border-amber-400 text-center transform transition-all scale-95 opacity-0 duration-300" id="modalContentBox">
+            <div id="modalEmoji" class="text-7xl mb-4 animate-bounce"></div>
+            <h2 id="modalTitle" class="text-3xl font-extrabold text-slate-800 mb-2"></h2>
+            <p id="modalDesc" class="text-slate-600 text-base mb-6 leading-relaxed"></p>
+            <div class="flex justify-center gap-4">
+                <button onclick="speakDescription()" class="bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold px-6 py-3 rounded-full shadow-md transition transform hover:scale-105 flex items-center gap-2">
+                    🔊 Listen Again
+                </button>
+                <button onclick="closeModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-6 py-3 rounded-full shadow-md transition">
+                    Close ❌
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fun Quiz Modal -->
+    <div id="quizModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border-4 border-indigo-400 text-center">
+            <div class="text-4xl mb-2">🧠</div>
+            <h2 class="text-2xl font-extrabold text-indigo-600 mb-4">Family Quiz Time!</h2>
+            <div id="quizQuestionBox" class="mb-6">
+                <p id="quizQuestionText" class="text-lg font-bold text-slate-700 mb-4"></p>
+                <div id="quizOptions" class="grid grid-cols-2 gap-3"></div>
+            </div>
+            <div id="quizResultBox" class="hidden mb-6">
+                <p id="quizScoreText" class="text-xl font-extrabold text-emerald-600 mb-4"></p>
+                <button onclick="restartQuiz()" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold px-6 py-2 rounded-full shadow">Play Again 🔄</button>
+            </div>
+            <button onclick="closeQuizModal()" class="text-sm text-slate-500 hover:text-slate-700 font-semibold underline">Exit Quiz</button>
+        </div>
+    </div>
+
+    <!-- Custom Notification Box (Replaces alert) -->
+    <div id="customAlert" class="fixed top-20 right-6 bg-emerald-500 text-white font-bold px-6 py-3 rounded-2xl shadow-xl z-50 transform translate-y-[-200%] transition-transform duration-300 flex items-center gap-3">
+        <span id="alertIcon">🎉</span>
+        <span id="alertMessage">Great job!</span>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        let currentName = "";
+        let currentDesc = "";
+        let synth = window.speechSynthesis;
+        let isMuted = false;
+
+        function selectMember(name, emoji, desc) {
+            currentName = name;
+            currentDesc = desc;
+            
+            document.getElementById('modalEmoji').innerText = emoji;
+            document.getElementById('modalTitle').innerText = name;
+            document.getElementById('modalDesc').innerText = desc;
+
+            const modal = document.getElementById('detailModal');
+            const box = document.getElementById('modalContentBox');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                box.classList.remove('scale-95', 'opacity-0');
+                box.classList.add('scale-100', 'opacity-100');
+            }, 10);
+
+            speakDescription();
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('detailModal');
+            const box = document.getElementById('modalContentBox');
+            box.classList.remove('scale-100', 'opacity-100');
+            box.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                if (synth) synth.cancel();
+            }, 300);
+        }
+
+        function speakDescription() {
+            if (isMuted || !synth) return;
+            synth.cancel();
+            let utterance = new SpeechSynthesisUtterance(currentName + ". " + currentDesc);
+            utterance.rate = 0.9;
+            utterance.pitch = 1.2;
+            synth.speak(utterance);
+        }
+
+        function playBGM() {
+            isMuted = !isMuted;
+            const text = document.getElementById('soundText');
+            if (isMuted) {
+                text.innerText = "Sound Off";
+                if (synth) synth.cancel();
+                showAlert("🔇 Sound turned off", "ℹ️");
+            } else {
+                text.innerText = "Sound On";
+                showAlert("🔊 Sound turned on!", "🎉");
+            }
+        }
+
+        function showAlert(msg, icon = "🎉") {
+            const alertBox = document.getElementById('customAlert');
+            document.getElementById('alertMessage').innerText = msg;
+            document.getElementById('alertIcon').innerText = icon;
+            alertBox.classList.remove('translate-y-[-200%]');
+            alertBox.classList.add('translate-y-0');
+            setTimeout(() => {
+                alertBox.classList.remove('translate-y-0');
+                alertBox.classList.add('translate-y-[-200%]');
+            }, 3000);
+        }
+
+        // Quiz Logic
+        const quizData = [
+            { question: "Who bakes the most delicious cookies?", options: ["Grandmother", "Father", "Brother", "Sister"], answer: "Grandmother" },
+            { question: "Who tells wonderful bedtime stories and loves gardening?", options: ["Mother", "Grandfather", "Brother", "Sister"], answer: "Grandfather" },
+            { question: "Who is strong, kind, and helps with homework?", options: ["Father", "Grandmother", "Sister", "Mother"], answer: "Father" },
+            { question: "Who takes care of everyone with love and sings sweet songs?", options: ["Brother", "Mother", "Grandfather", "Father"], answer: "Mother" }
+        ];
+        let currentQuizIndex = 0;
+        let score = 0;
+
+        function showQuizModal() {
+            currentQuizIndex = 0;
+            score = 0;
+            document.getElementById('quizModal').classList.remove('hidden');
+            document.getElementById('quizQuestionBox').classList.remove('hidden');
+            document.getElementById('quizResultBox').classList.add('hidden');
+            loadQuizQuestion();
+        }
+
+        function closeQuizModal() {
+            document.getElementById('quizModal').classList.add('hidden');
+        }
+
+        function loadQuizQuestion() {
+            if (currentQuizIndex < quizData.length) {
+                let q = quizData[currentQuizIndex];
+                document.getElementById('quizQuestionText').innerText = `Question ${currentQuizIndex + 1}: ${q.question}`;
+                let optionsHtml = '';
+                q.options.forEach(opt => {
+                    optionsHtml += `<button onclick="checkAnswer('${opt}', '${q.answer}')" class="bg-amber-100 hover:bg-amber-200 text-slate-800 font-bold py-3 px-4 rounded-xl shadow transition transform hover:scale-105">${opt}</button>`;
+                });
+                document.getElementById('quizOptions').innerHTML = optionsHtml;
+            } else {
+                document.getElementById('quizQuestionBox').classList.add('hidden');
+                document.getElementById('quizResultBox').classList.remove('hidden');
+                document.getElementById('quizScoreText').innerText = `🏆 Quiz Completed! Your Score: ${score} / ${quizData.length}`;
+            }
+        }
+
+        function checkAnswer(selected, correct) {
+            if (selected === correct) {
+                score++;
+                showAlert("Correct! Great job! ⭐", "🎉");
+            } else {
+                showAlert("Oops! Try the next one! 💪", "💡");
+            }
+            currentQuizIndex++;
+            loadQuizQuestion();
+        }
+
+        function restartQuiz() {
+            showQuizModal();
+        }
+    </script>
+</body>
+</html>
